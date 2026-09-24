@@ -20,6 +20,10 @@ public enum MessageType {
     POST_NOT_FOUND("2001", "post.not_found", HttpStatus.NOT_FOUND),
     POST_NOT_OWNER("2002", "post.not_owner", HttpStatus.UNAUTHORIZED),
 
+    //comment
+    COMMENT_NOT_FOUND("3001", "comment.not_found", HttpStatus.NOT_FOUND),
+    COMMENT_NOT_OWNER("3002", "comment.not_owner", HttpStatus.UNAUTHORIZED),
+
     //general
     GENERAL_EXCEPTION("9999", "general.exception", HttpStatus.INTERNAL_SERVER_ERROR);
 
