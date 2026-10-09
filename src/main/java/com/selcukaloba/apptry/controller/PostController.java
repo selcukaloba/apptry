@@ -19,15 +19,15 @@ public class PostController {
     private PostService postService;
 
     @GetMapping(path = "/getAll")
-    public List<PostResponse> getAllPosts()
+    public List<PostResponse> getAllPosts(Principal principal)
     {
-        return postService.getAllPosts();
+        return postService.getAllPosts(principal.getName());
     }
 
     @GetMapping(path = "/getById/{id}")
-    public PostResponse getPostById(@PathVariable Long id)
+    public PostResponse getPostById(@PathVariable Long id, Principal principal)
     {
-        return postService.getPostById(id);
+        return postService.getPostById(id, principal.getName());
     }
 
     @PostMapping(path = "/createPost")
