@@ -1,10 +1,68 @@
-
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
+import { logout, type AuthResponse } from "./authService";
 
 export function AuthPage() {
   const [mode, setMode] = useState<"login" | "register">("login");
+  const [session, setSession] = useState<AuthResponse | null>(null);
+  const [logoutMessage, setLogoutMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogout() {
+    if (!session) return;
+
+    setLoading(true);
+    setLogoutMessage("");
+
+    try {
+      await logout(session.refreshToken);
+      setSession(null);
+    } catch (error) {
+      setLogoutMessage(
+        error instanceof Error ? error.message : "Çıkış başarısız oldu."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (session) {
+    return (
+      <main className="auth-theme flex min-h-screen items-center justify-center px-4 py-10">
+        <section className="w-full max-w-md rounded-2xl border border-white/10 bg-surface-container-low p-8 text-center shadow-2xl">
+          <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-pulse-primary text-2xl font-bold text-[#21183b]">
+            P
+          </div>
+
+          <h1 className="text-2xl font-bold">Pulse'a hoş geldin!</h1>
+
+          <p className="mt-3 text-on-surface-variant">
+            Giriş yapan kullanıcı:{" "}
+            <span className="font-semibold text-on-surface">
+              {session.username}
+            </span>
+          </p>
+
+          {logoutMessage && (
+            <p role="alert" className="mt-4 text-sm text-red-400">
+              {logoutMessage}
+            </p>
+          )}
+
+          <Button
+            type="button"
+            className="mt-6 w-full"
+            onClick={handleLogout}
+            disabled={loading}
+          >
+            {loading ? "Çıkış yapılıyor..." : "Çıkış yap"}
+          </Button>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="auth-theme flex min-h-screen items-center justify-center px-4 py-10">
@@ -50,7 +108,11 @@ export function AuthPage() {
             </button>
           </div>
 
-          {mode === "login" ? <LoginForm /> : <RegisterForm />}
+          {mode === "login" ? (
+            <LoginForm onSuccess={setSession} />
+          ) : (
+            <RegisterForm onSuccess={setSession} />
+          )}
         </div>
 
         <p className="mt-6 text-center text-xs text-on-surface-variant">

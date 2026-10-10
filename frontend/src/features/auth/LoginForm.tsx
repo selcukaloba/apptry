@@ -1,16 +1,35 @@
-
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { login, type AuthResponse } from "./authService";
 
-export function LoginForm() {
+type LoginFormProps = {
+  onSuccess: (response: AuthResponse) => void;
+};
+
+export function LoginForm({ onSuccess }: LoginFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage("Arayüz hazır. API bağlantısını sonraki adımda ekleyeceğiz.");
+    setMessage("");
+    setLoading(true);
+
+    try {
+      const response = await login({ username, password });
+      onSuccess(response);
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Giriş sırasında bir hata oluştu."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -68,13 +87,13 @@ export function LoginForm() {
       </div>
 
       {message && (
-        <p role="status" className="text-sm text-on-surface-variant">
+        <p role="alert" className="text-sm text-red-400">
           {message}
         </p>
       )}
 
-      <Button type="submit" className="w-full">
-        Giriş yap
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "Giriş yapılıyor..." : "Giriş yap"}
       </Button>
     </form>
   );
