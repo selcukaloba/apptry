@@ -1,23 +1,42 @@
-
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { register, type AuthResponse } from "./authService";
 
-export function RegisterForm() {
+type RegisterFormProps = {
+  onSuccess: (response: AuthResponse) => void;
+};
+
+export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setMessage("");
 
     if (password !== confirmPassword) {
       setMessage("Şifreler birbiriyle eşleşmiyor.");
       return;
     }
 
-    setMessage("Arayüz hazır. API bağlantısını sonraki adımda ekleyeceğiz.");
+    setLoading(true);
+
+    try {
+      const response = await register({ username, password });
+      onSuccess(response);
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Kayıt sırasında bir hata oluştu."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -93,13 +112,13 @@ export function RegisterForm() {
       </label>
 
       {message && (
-        <p role="status" className="text-sm text-on-surface-variant">
+        <p role="alert" className="text-sm text-red-400">
           {message}
         </p>
       )}
 
-      <Button type="submit" className="w-full">
-        Hesap oluştur
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "Hesap oluşturuluyor..." : "Hesap oluştur"}
       </Button>
     </form>
   );
