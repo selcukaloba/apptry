@@ -128,3 +128,68 @@
     @apply font-sans;
     }
 }
+
+
+/* Pulse auth page design tokens */
+@theme inline {
+  --color-surface: var(--pulse-surface);
+  --color-surface-container-lowest: var(--pulse-surface-container-lowest);
+  --color-surface-container-low: var(--pulse-surface-container-low);
+  --color-surface-container: var(--pulse-surface-container);
+  --color-surface-container-high: var(--pulse-surface-container-high);
+  --color-on-surface: var(--pulse-on-surface);
+  --color-on-surface-variant: var(--pulse-on-surface-variant);
+  --color-outline: var(--pulse-outline);
+  --color-pulse-primary: var(--pulse-primary);
+  --color-pulse-primary-container: var(--pulse-primary-container);
+
+  --font-headline-md: "Geist Variable", sans-serif;
+  --font-body: "Geist Variable", sans-serif;
+
+  --spacing-space-xs: 0.5rem;
+  --spacing-space-sm: 0.75rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2rem;
+}
+
+.auth-theme {
+  color-scheme: dark;
+
+  --background: #111018;
+  --foreground: #f3f0fa;
+  --card: #191722;
+  --card-foreground: #f3f0fa;
+  --popover: #191722;
+  --popover-foreground: #f3f0fa;
+
+  /* Purple primary color for shadcn components */
+  --primary: #b7a1ff;
+  --primary-foreground: #21183b;
+
+  --secondary: #292532;
+  --secondary-foreground: #f3f0fa;
+  --muted: #292532;
+  --muted-foreground: #aaa4b8;
+  --accent: #30283f;
+  --accent-foreground: #f3f0fa;
+
+  --border: #373142;
+  --input: #373142;
+  --ring: #b7a1ff;
+
+  --pulse-surface: #111018;
+  --pulse-surface-container-lowest: #15131d;
+  --pulse-surface-container-low: #191722;
+  --pulse-surface-container: #201d2a;
+  --pulse-surface-container-high: #2b2638;
+  --pulse-on-surface: #f3f0fa;
+  --pulse-on-surface-variant: #c0b8cf;
+  --pulse-outline: #797187;
+  --pulse-primary: #b7a1ff;
+  --pulse-primary-container: #35265b;
+
+  min-height: 100vh;
+  background: var(--pulse-surface);
+  color: var(--pulse-on-surface);
+}
